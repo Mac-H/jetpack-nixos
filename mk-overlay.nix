@@ -63,8 +63,12 @@ makeScope final.newScope (self: {
         # https://bugs.launchpad.net/ubuntu/+source/bzip2/+bug/1834494
         nativeBuildInputs = [ final.buildPackages.bzip2_1_1 ];
       } ''
+      echo Extracting L4T r${versions.major l4tMajorMinorPatchVersion}_Release_v${versions.minor l4tMajorMinorPatchVersion}.${versions.patch l4tMajorMinorPatchVersion}/release/Jetson_Linux_R${l4tMajorMinorPatchVersion}_aarch64.tbz2 BSP from $src
       umask 022   # Resolve permission issues: Some releases of the .tbz2 file have group write permissions which will cause the error 'suspicious ownership or permission on '/nix/store/#####-l4t-unpacked' for output 'out'; rejecting this build output'
       bzip2 -d -c $src | tar xf -
+      ls -al Linux_for_Tegra
+      chmod -R g-w,o-w Linux_for_Tegra
+      ls -al Linux_for_Tegra
       mv Linux_for_Tegra $out
     '';
     patches = bspPatches;
